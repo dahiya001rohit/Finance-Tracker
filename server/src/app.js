@@ -38,15 +38,22 @@ app.use(
 );
 
 // ─── CORS ───────────────────────────────────────────────────────────────────
+// CLIENT_URL can be comma-separated: http://localhost:5173,https://app.onrender.com
+const allowedOrigins = new Set(
+  (config.clientUrl || "").split(",").map((u) => u.trim()).filter(Boolean)
+);
+
 function corsOrigin(origin, callback) {
   if (!origin) return callback(null, true); // non-browser / curl
-  if (config.nodeEnv !== "production") {
-    // In dev allow any localhost / 127.0.0.1 port
-    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-      return callback(null, true);
-    }
+  // Allow any localhost port (dev)
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    return callback(null, true);
   }
-  if (origin === config.clientUrl) return callback(null, true);
+  // Allow any *.onrender.com subdomain
+  if (/^https:\/\/[a-z0-9-]+\.onrender\.com$/.test(origin)) {
+    return callback(null, true);
+  }
+  if (allowedOrigins.has(origin)) return callback(null, true);
   return callback(new Error(`CORS blocked: ${origin}`));
 }
 app.use(cors({ origin: corsOrigin, credentials: true }));
