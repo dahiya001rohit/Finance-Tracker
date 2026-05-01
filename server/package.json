@@ -5,7 +5,7 @@
   "description": "Finance Tracker — Express + MongoDB API",
   "engines": { "node": ">=18" },
   "scripts": {
-    "dev":           "nodemon --watch src --watch .env src/index.js",
+    "dev":           "nodemon --watch src --watch .env --ext js,mjs,cjs,json,env src/index.js",
     "start":         "node src/index.js",
     "test":          "NODE_ENV=test jest --runInBand --forceExit",
     "test:coverage": "NODE_ENV=test jest --runInBand --forceExit --coverage"
