@@ -17,7 +17,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: "../server/dist",
+    outDir: "dist",      // Render static site expects client/dist
     emptyOutDir: true
   }
 });
